@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dev/projects/training_server_bd/internal/app/api"
+	"dev/projects/ServerAndDB/internal/app/api"
 	"flag"
 	"log"
 
