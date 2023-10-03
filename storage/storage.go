@@ -21,7 +21,7 @@ func New(config *Config) *Storage {
 }
 
 func (storage *Storage) Open() error {
-	db, err := sql.Open("postgres", "host=localhost port=5432 user=postgres password=1004 dbname=restapi sslmode=disable")
+	db, err := sql.Open("postgres", storage.config.DatabaseURI)
 	if err != nil {
 		return err
 	}

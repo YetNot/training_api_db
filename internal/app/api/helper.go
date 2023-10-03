@@ -2,7 +2,6 @@ package api
 
 import (
 	"dev/projects/ServerAndDB/storage"
-	"net/http"
 
 	_ "github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"

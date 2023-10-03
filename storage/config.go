@@ -1,7 +1,7 @@
 package storage
 
 type Config struct {
-	DatabaseURI string `toml:"databaseuri"`
+	DatabaseURI string `toml:"database_uri"`
 }
 
 func NewConfig() *Config {
