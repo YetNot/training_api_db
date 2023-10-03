@@ -3,6 +3,7 @@ package storage
 import (
 	"dev/projects/ServerAndDB/internal/app/models"
 	"fmt"
+	"log"
 )
 
 type ArticleRepository struct {
@@ -22,8 +23,18 @@ func (ar *ArticleRepository) Create(a *models.Article) (*models.Article, error) 
 }
 
 func (ar *ArticleRepository) DeleteById(id int) (*models.Article, error) {
-	
-	return nil, nil
+	articles, ok, err := ar.FindArticleById(id)
+	if err != nil {
+		return nil, err
+	}
+	if ok {
+		query := fmt.Sprintf("DELETE FROM %s WHERE id=$1", tableArticle)
+		_, err := ar.storage.db.Exec(query, id)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return articles, nil
 }
 
 func (ar *ArticleRepository) FindArticleById(id int) (*models.Article, bool, error) {
@@ -44,5 +55,22 @@ func (ar *ArticleRepository) FindArticleById(id int) (*models.Article, bool, err
 }
 
 func (ar *ArticleRepository) SelectAll() ([]*models.Article, error) {
-	return nil, nil
+	query := fmt.Sprintf("SELECT * FROM %s", tableArticle)
+	rows, err := ar.storage.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	articles := make([]*models.Article, 0)
+	for rows.Next() {
+		a := models.Article{}
+		err := rows.Scan(&a.ID, &a.Title, &a.Author, &a.Content)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		articles = append(articles, &a)
+	}
+	return articles, nil
 }

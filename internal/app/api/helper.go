@@ -8,6 +8,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var (
+	prefix string = "/api/v1"
+)
+
 func (a *API) configreLoggerField() error {
 	log_level, err := logrus.ParseLevel(a.config.LoggerLevel)
 	if err != nil {
@@ -18,9 +22,11 @@ func (a *API) configreLoggerField() error {
 }
 
 func (a *API) configreRouterField() {
-	a.router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello! This is rest api!"))
-	})
+	a.router.HandleFunc(prefix + "/articles", a.GetAllArticles).Methods("GET")
+	a.router.HandleFunc(prefix + "/articles/{id}", a.GetArticleById).Methods("GET")
+	a.router.HandleFunc(prefix + "/articles/{id}", a.DeleteArticleById).Methods("DELETE")
+	a.router.HandleFunc(prefix + "/articles", a.PostArticle).Methods("POST")
+	a.router.HandleFunc(prefix + "/user/register", a.PostUserRegister).Methods("POST")
 }
 
 func (a *API) configreStorageField() error {

@@ -47,7 +47,7 @@ func (ur *UserRepository) SelectAll() ([]*models.User, error) {
 	}
 	defer rows.Close()
 
-	users:= make([]*models.User, 0)
+	users := make([]*models.User, 0)
 	for rows.Next() {
 		u := models.User{}
 		err := rows.Scan(&u.ID, &u.Login, &u.Password)
